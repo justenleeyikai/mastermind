@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Mastermind</string>
+    <string name="button_A_text">A</string>
+    <string name="button_B_text">B</string>
+    <string name="button_C_text">C</string>
+
 </resources>

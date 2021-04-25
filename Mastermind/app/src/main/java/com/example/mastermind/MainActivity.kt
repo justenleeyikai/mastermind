@@ -2,13 +2,17 @@ package com.example.mastermind
 
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.example.mastermind.databinding.ActivityMainBinding
+import com.example.mastermind.viewmodels.MastermindViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mastermindViewModel: MastermindViewModel by viewModels()
 
     private var answer = "ABA"
     private var attemptedAnswers = ArrayList<String>()
@@ -21,24 +25,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        binding.lifecycleOwner = this
+        binding.viewModel = mastermindViewModel
+
         binding.answerTextView.text = answer
 
-        binding.buttonA.setOnClickListener {
-            addAttemptedAnswer(A)
-        }
-        binding.buttonB.setOnClickListener {
-            addAttemptedAnswer(B)
-        }
-        binding.buttonC.setOnClickListener {
-            addAttemptedAnswer(C)
-        }
-
-        refreshGameBoard()
-    }
-
-    private fun addAttemptedAnswer(answer: String) {
-        attemptedAnswers.add(answer)
-        lastThreeAnswers = attemptedAnswers.takeLast(3)
+        mastermindViewModel.attemptedAnswers.observe(this, Observer {
+            refreshGameBoard()
+        })
 
         refreshGameBoard()
     }
@@ -49,33 +43,36 @@ class MainActivity : AppCompatActivity() {
 
         binding.attemptsTextView.setText(attemptedAnswers.toString())
 
-        lastThreeAnswers?.let {
+        mastermindViewModel.attemptedAnswers.value?.takeLast(3)?.toList()?.let {
+            lastThreeAnswers = it
+        }
 
+        lastThreeAnswers.let {
             binding.lED1.setBackgroundColor(
-                    getColorForAnswer(
-                            if (lastThreeAnswers.size < 3) Answer.NONE
-                            else getColorForAnswerAtPosition(
-                                    attemptedAnswer = it.getOrElse(0) { NOTHING },
-                                    answerAtPosition = answer[0].toString()
-                            )
+                getColorForAnswer(
+                    if (lastThreeAnswers.size < 3) Answer.NONE
+                    else getColorForAnswerAtPosition(
+                        attemptedAnswer = it.getOrElse(0) { NOTHING },
+                        answerAtPosition = answer[0].toString()
                     )
+                )
             )
 
             binding.lED2.setBackgroundColor(
-                    getColorForAnswer(
-                            getColorForAnswerAtPosition(
-                                    attemptedAnswer = it.getOrElse(1) { NOTHING },
-                                    answerAtPosition = answer[1].toString()
-                            )
+                getColorForAnswer(
+                    getColorForAnswerAtPosition(
+                        attemptedAnswer = it.getOrElse(1) { NOTHING },
+                        answerAtPosition = answer[1].toString()
                     )
+                )
             )
             binding.lED3.setBackgroundColor(
-                    getColorForAnswer(
-                            getColorForAnswerAtPosition(
-                                    attemptedAnswer = it.getOrElse(if (lastThreeAnswers.size < 3) 0 else 2) { NOTHING },
-                                    answerAtPosition = answer[2].toString()
-                            )
+                getColorForAnswer(
+                    getColorForAnswerAtPosition(
+                        attemptedAnswer = it.getOrElse(if (lastThreeAnswers.size < 3) 0 else 2) { NOTHING },
+                        answerAtPosition = answer[2].toString()
                     )
+                )
             )
         }
     }
@@ -90,8 +87,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getColorForAnswerAtPosition(
-            attemptedAnswer: String,
-            answerAtPosition: String
+        attemptedAnswer: String,
+        answerAtPosition: String
     ): Answer {
         return when {
             attemptedAnswer == NOTHING -> Answer.NONE

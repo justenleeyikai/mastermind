@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.mastermind.viewmodels.MastermindViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,24 +20,27 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="285dp"
             android:backgroundTint="#8AAFBF"
-            android:text="B"
+            android:text="@string/button_B_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/buttonC"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buttonA"
-            app:rippleColor="#FFFFFF" />
+            app:rippleColor="#FFFFFF"
+            android:onClick="@{()-> viewModel.attemptAnswerB()}"/>
 
         <Button
             android:id="@+id/buttonC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#8AAFBF"
-            android:text="C"
+            android:text="@string/button_C_text"
             app:layout_constraintBottom_toBottomOf="@+id/buttonB"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/buttonB"
-            app:rippleColor="#FFFFFF" />
+            app:rippleColor="#FFFFFF"
+            android:onClick="@{()-> viewModel.attemptAnswerC()}"/>
+
 
         <TextView
             android:id="@+id/answer_text_view"
@@ -57,19 +66,21 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/answer_text_view"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:text="@{viewModel.attemptedAnswers.toString()}"/>
 
         <Button
             android:id="@+id/buttonA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#8AAFBF"
-            android:text="A"
+            android:text="@string/button_A_text"
             app:layout_constraintBottom_toBottomOf="@+id/buttonB"
             app:layout_constraintEnd_toStartOf="@+id/buttonB"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:rippleColor="#FFFFFF" />
+            app:rippleColor="#FFFFFF"
+            android:onClick="@{()-> viewModel.attemptAnswerA()}"/>
 
 
         <ImageView
@@ -82,7 +93,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.768"
-            app:srcCompat="@android:drawable/gallery_thumb" />
+            app:srcCompat="@android:drawable/gallery_thumb"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/lED2"
@@ -94,7 +106,8 @@
             app:layout_constraintStart_toEndOf="@+id/lED1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.768"
-            app:srcCompat="@android:drawable/gallery_thumb" />
+            app:srcCompat="@android:drawable/gallery_thumb"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/lED3"
@@ -106,7 +119,8 @@
             app:layout_constraintStart_toEndOf="@+id/lED2"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.768"
-            app:srcCompat="@android:drawable/gallery_thumb" />
+            app:srcCompat="@android:drawable/gallery_thumb"
+            tools:ignore="ContentDescription" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
